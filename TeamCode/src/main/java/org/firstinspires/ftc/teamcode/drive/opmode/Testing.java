@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.util.ConfigMan;
 
 import java.util.HashMap;
 import java.util.List;
-
+@TeleOp(name = "TestForDrone")
 class Testing extends LinearOpMode {
 
     boolean lb;
@@ -205,7 +205,7 @@ class Testing extends LinearOpMode {
             centralScheme.put("servo11Usability", 0);
         }
 
-        drone = drive.hardware.droneServo;
+        drone = servo3;
         // Collect Servos & Motors
         if ((int) centralScheme.get("motor0Usability") == 1) {
             motors[0] = motor0;
