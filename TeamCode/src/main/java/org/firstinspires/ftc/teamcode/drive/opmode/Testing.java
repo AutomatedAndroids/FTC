@@ -83,7 +83,27 @@ class Testing extends LinearOpMode {
     Servo drone;
 
     private void updateGamepad() {
+        rx = gamepad1.right_stick_x;
+        ry = gamepad1.right_stick_y;
+        buttonA = gamepad1.a;
+        buttonB = gamepad1.b;
+        buttonX = gamepad1.x;
+        buttonY = gamepad1.y;
+        dpadUp = gamepad1.dpad_up;
+        dpadDown = gamepad1.dpad_down;
+        dpadRight = gamepad1.dpad_right;
+        dpadLeft = gamepad1.dpad_left;
+        rt = gamepad1.left_trigger;
+        lt = gamepad1.right_trigger;
 
+        lx = gamepad1.left_stick_x;
+        ly = gamepad1.left_stick_y;
+
+        lb = gamepad1.left_bumper;
+        rb = gamepad1.right_bumper;
+
+        back = gamepad1.back;
+        start = gamepad1.start;
     }
 
     @Override
