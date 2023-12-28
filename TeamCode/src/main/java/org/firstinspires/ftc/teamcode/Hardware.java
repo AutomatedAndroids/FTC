@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.ftccommon.internal.manualcontrol.commands.AnalogCommands;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.util.Encoder;
 
 public class Hardware {
 
@@ -22,20 +23,19 @@ public class Hardware {
 
     public DcMotorEx armMotor1;
     public DcMotorEx armMotor2;
-
+    public DcMotorEx leftSlider;
+    public DcMotorEx rightSlider;
     public DcMotorEx[] motors;
-
     public IMU imu;
 
     public VoltageSensor batteryVoltageSens;
 
+//servos
 
-    public Servo servo1;
-    public Servo servo2;
-    public Servo servo3;
-    public Servo servo4;
-
-    public Servo droneServo;
+    public Servo droneLauncher;
+    public Servo clawFront;
+    public Servo clawBack;
+    public Servo clawWrist;
 
     public Hardware(HardwareMap hardwareMap) {
         //initialize variables
@@ -43,53 +43,35 @@ public class Hardware {
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
+        backLeft.getCurrentPosition();
 
         armMotor1 = hardwareMap.get(DcMotorEx.class, "leftArm");
         armMotor2 = hardwareMap.get(DcMotorEx.class, "rightArm");
 
-        droneServo = hardwareMap.get(Servo.class, "droneLauncher");
+        rightSlider = hardwareMap.get(DcMotorEx.class, "rightSlider");
+        leftSlider = hardwareMap.get(DcMotorEx.class, "leftSlider");
 
-        // Establish Servos
-        try {
-            servo1 = hardwareMap.get(Servo.class, "servo1");
+        droneLauncher = hardwareMap.get(Servo.class, "droneLauncher");
+        clawFront = hardwareMap.get(Servo.class, "clawFrontServo");
+        clawBack = hardwareMap.get(Servo.class, "clawBackServo");
+        clawWrist = hardwareMap.get(Servo.class, "ClawMountServo");
 
-        } catch (IllegalArgumentException e) {
-
-        }
-        try {
-            servo2 = hardwareMap.get(Servo.class, "servo2");
-
-        } catch (IllegalArgumentException e) {
-
-        }
-        try {
-            servo3 = hardwareMap.get(Servo.class, "servo3");
-
-        } catch (IllegalArgumentException e) {
-
-        }
-        try {
-            servo4 = hardwareMap.get(Servo.class, "servo4");
-
-        } catch (IllegalArgumentException e) {
-
-        }
 
 
         motors = new DcMotorEx[]{frontLeft, frontRight, backLeft, backRight};
 
-            // IMU
+        // IMU
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
 
-            // Control Hub
+        // Control Hub
 
-                // Battery
+        // Battery
         batteryVoltageSens = hardwareMap.voltageSensor.iterator().next();
 
-                //
+        //
 
 
         // Fix the things
@@ -105,3 +87,4 @@ public class Hardware {
         }
     }
 }
+
