@@ -76,6 +76,20 @@ public class MecanumTeleOp extends LinearOpMode {
             telemetry.addLine(String.valueOf(hardware.rightSlider.getTargetPosition()));
             telemetry.update();
 
+            if (gamepad2.dpad_left) {
+                hardware.clawWrist.setPosition(0.35);
+            }
+            if(gamepad2.dpad_right){
+                hardware.clawWrist.setPosition(-0.35);
+            }
+            if(gamepad2.dpad_down) {
+                hardware.clawWrist.setPosition(0);
+            }
+
+            if(gamepad2.dpad_up) {
+                hardware.clawBack.setPosition(0.1);
+                hardware.clawFront.setPosition(0.1);
+            }
 //            arm1.runWithController(ly2, updateDelta);
 //            arm2.runWithController(ry2, updateDelta);
 //            updateDelta.reset();
