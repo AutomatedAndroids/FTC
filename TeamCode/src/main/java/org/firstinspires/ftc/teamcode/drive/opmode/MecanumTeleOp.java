@@ -7,6 +7,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.util.DashboardUtil;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.FtcDashboard;
 
 @TeleOp(group = "drive")
 public class MecanumTeleOp extends LinearOpMode {
@@ -14,10 +18,11 @@ public class MecanumTeleOp extends LinearOpMode {
     public void runOpMode() {
 
         waitForStart();
-
+        int positionOfArm = 0;
         boolean started = true;
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         Hardware hardware = new Hardware(hardwareMap);
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         waitForStart();
 //        ElapsedTime updateDelta = new ElapsedTime();
         while (opModeIsActive()) {
@@ -35,6 +40,41 @@ public class MecanumTeleOp extends LinearOpMode {
             hardware.backLeft.setPower(y - x + rx);
             hardware.backRight.setPower(y + x - rx);
 
+
+            if(gamepad2.dpad_left) {
+                positionOfArm = 0;
+                telemetry.addLine("DPAD_LEFT was pressed");
+                hardware.armMotor1.setTargetPosition(positionOfArm);
+                hardware.armMotor2.setTargetPosition(positionOfArm);
+                hardware.armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hardware.armMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                hardware.armMotor1.setPower(0.50);
+                hardware.armMotor2.setPower(0.50);
+            }
+            if(gamepad2.dpad_up) {
+                positionOfArm = 1;
+                telemetry.addLine("DPAD_UP was pressed");
+                hardware.armMotor1.setTargetPosition(positionOfArm);
+                hardware.armMotor2.setTargetPosition(positionOfArm);
+                hardware.armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hardware.armMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                hardware.armMotor1.setPower(0.50);
+                hardware.armMotor2.setPower(0.50);
+            }
+            if(gamepad2.dpad_right) {
+                positionOfArm = 3;
+
+                telemetry.addLine("DPAD_RIGHT was pressed");
+                hardware.armMotor1.setTargetPosition(positionOfArm);
+                hardware.armMotor2.setTargetPosition(positionOfArm);
+                hardware.armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hardware.armMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                hardware.armMotor1.setPower(0.50);
+                hardware.armMotor2.setPower(0.50);
+            }
 
 
 

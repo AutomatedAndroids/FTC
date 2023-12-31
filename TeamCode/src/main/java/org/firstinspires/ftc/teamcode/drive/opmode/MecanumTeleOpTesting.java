@@ -68,6 +68,8 @@ public class MecanumTeleOpTesting extends LinearOpMode {
                 positionOfArm = 1;
 
                 telemetry.addLine("y:Arm motor should be moving?");
+                telemetry.addData("encoder rightArmMotor", hardware.armMotor2.getCurrentPosition());
+                telemetry.addData("encoder leftArmMotor", hardware.armMotor1.getCurrentPosition());
                 hardware.armMotor1.setTargetPosition(positionOfArm);
                 hardware.armMotor2.setTargetPosition(positionOfArm);
                 hardware.armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
