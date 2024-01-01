@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
@@ -14,15 +15,15 @@ import com.acmerobotics.dashboard.FtcDashboard;
 
 @TeleOp(group = "drive")
 public class MecanumTeleOp extends LinearOpMode {
+    Telemetry telemetries;
     @Override
     public void runOpMode() {
-
         waitForStart();
         int positionOfArm = 0;
         boolean started = true;
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         Hardware hardware = new Hardware(hardwareMap);
-        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+        telemetries = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         waitForStart();
 //        ElapsedTime updateDelta = new ElapsedTime();
         while (opModeIsActive()) {
@@ -41,42 +42,63 @@ public class MecanumTeleOp extends LinearOpMode {
             hardware.backRight.setPower(y + x - rx);
 
 
+
             if(gamepad2.dpad_left) {
                 positionOfArm = 0;
-                telemetry.addLine("DPAD_LEFT was pressed");
+                telemetries.addLine("DPAD_LEFT was pressed");
                 hardware.armMotor1.setTargetPosition(positionOfArm);
                 hardware.armMotor2.setTargetPosition(positionOfArm);
                 hardware.armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 hardware.armMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hardware.armMotor1.setPower(1);
+                hardware.armMotor2.setPower(1);
 
-                hardware.armMotor1.setPower(0.50);
-                hardware.armMotor2.setPower(0.50);
             }
             if(gamepad2.dpad_up) {
                 positionOfArm = 1;
-                telemetry.addLine("DPAD_UP was pressed");
+                telemetries.addLine("DPAD_UP was pressed");
                 hardware.armMotor1.setTargetPosition(positionOfArm);
                 hardware.armMotor2.setTargetPosition(positionOfArm);
+                hardware.armMotor1.setTargetPositionTolerance(0);
+                hardware.armMotor1.setTargetPositionTolerance(0);
                 hardware.armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 hardware.armMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                hardware.armMotor1.setPower(0.50);
-                hardware.armMotor2.setPower(0.50);
+                hardware.armMotor1.setPower(1);
+                hardware.armMotor2.setPower(1);
             }
             if(gamepad2.dpad_right) {
                 positionOfArm = 3;
 
-                telemetry.addLine("DPAD_RIGHT was pressed");
+                telemetries.addLine("DPAD_RIGHT was pressed");
                 hardware.armMotor1.setTargetPosition(positionOfArm);
                 hardware.armMotor2.setTargetPosition(positionOfArm);
                 hardware.armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 hardware.armMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hardware.armMotor1.setPower(1);
+                hardware.armMotor2.setPower(1);
 
-                hardware.armMotor1.setPower(0.50);
-                hardware.armMotor2.setPower(0.50);
             }
+            telemetries.addLine(" Arm Motor 1; \n\t Current: " + String.valueOf(hardware.armMotor1.getCurrent(CurrentUnit.AMPS)) + "\n\t Position: " + String.valueOf(hardware.armMotor1.getCurrentPosition()) + "\n\t Target: " + String.valueOf(hardware.armMotor1.getTargetPosition()));
+            telemetries.addLine(" Arm Motor 2; \n\t Current: " + String.valueOf(hardware.armMotor2.getCurrent(CurrentUnit.AMPS)) + "\n\t Position: " + String.valueOf(hardware.armMotor2.getCurrentPosition()) + "\n\t Target: " + String.valueOf(hardware.armMotor2.getTargetPosition()));
+            telemetries.addLine(" \n Current Voltage: " + String.valueOf(hardware.batteryVoltageSens.getVoltage()));
+            telemetries.update();
 
+            if (gamepad2.a) {
+                hardware.clawWrist.setPosition(0.45);
+            }
+            if (gamepad2.b) {
+                hardware.clawWrist.setPosition(0);
 
+            }
+            if (gamepad2.x) {
+                hardware.clawBack.setPosition(0.15);
+                hardware.clawFront.setPosition(0.15);
+            }
+            if (gamepad2.y) {
+                hardware.clawFront.setPosition(0);
+                hardware.clawBack.setPosition(0);
+
+            }
 
 //            SlidingArmVD arm1 = new SlidingArmV("part", "arm1", new HashMap<String, Integer>(), 0, hardware.armMotor1);
 //            SlidingArmVD arm2 = new SlidingArmVD("part", "arm1", new HashMap<String, Integer>(), 0, hardware.armMotor2);
