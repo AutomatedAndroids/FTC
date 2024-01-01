@@ -22,6 +22,7 @@ public class Hardware {
     public DcMotorEx backLeft;
     public DcMotorEx backRight;
 
+
     public DcMotorEx armMotor1;
     public DcMotorEx armMotor2;
     public DcMotorEx leftSlider;
@@ -61,7 +62,6 @@ public class Hardware {
         clawWrist = hardwareMap.get(Servo.class, "ClawMountServo");
 
 
-
         motors = new DcMotorEx[]{frontLeft, frontRight, backLeft, backRight};
 
         // IMU
@@ -83,3 +83,4 @@ public class Hardware {
         }
     }
 }
+
