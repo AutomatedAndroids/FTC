@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
+@Disabled
 @TeleOp(group = "drive")
 public class MecanumTeleOpTesting extends LinearOpMode {
     @Override
@@ -39,13 +41,13 @@ public class MecanumTeleOpTesting extends LinearOpMode {
 //            b
             if(gamepad2.a) {
                 telemetry.addLine("a");
-                hardware.droneLauncher.setPosition(0.75);
-                telemetry.addLine(Double.toString(hardware.droneLauncher.getPosition()));
+                hardware.droneServo.setPosition(0.75);
+                telemetry.addLine(Double.toString(hardware.droneServo.getPosition()));
             }
             if (gamepad2.b) {
                 telemetry.addLine("b");
-                hardware.droneLauncher.setPosition(0.01);
-                telemetry.addLine(Double.toString(hardware.droneLauncher.getPosition()));
+                hardware.droneServo.setPosition(0.01);
+                telemetry.addLine(Double.toString(hardware.droneServo.getPosition()));
             }
 
             int positionOfSliderMotors =  20;
