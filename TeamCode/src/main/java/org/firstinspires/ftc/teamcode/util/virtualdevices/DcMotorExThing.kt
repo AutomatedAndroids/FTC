@@ -1,18 +1,18 @@
 package org.firstinspires.ftc.teamcode.util.virtualdevices
-//
-//import com.qualcomm.robotcore.hardware.DcMotor
-//import com.qualcomm.robotcore.hardware.DcMotorController
-//import com.qualcomm.robotcore.hardware.DcMotorEx
-//import com.qualcomm.robotcore.hardware.DcMotorSimple
-//import com.qualcomm.robotcore.hardware.HardwareDevice
-//import com.qualcomm.robotcore.hardware.PIDCoefficients
-//import com.qualcomm.robotcore.hardware.PIDFCoefficients
-//import com.qualcomm.robotcore.hardware.configuration.annotations.MotorType
-//import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
-//import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
-//import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
-//
-///** The first motor will be the primary motor, and will be used to find most member information. */
+
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorController
+import com.qualcomm.robotcore.hardware.DcMotorEx
+import com.qualcomm.robotcore.hardware.DcMotorSimple
+import com.qualcomm.robotcore.hardware.HardwareDevice
+import com.qualcomm.robotcore.hardware.PIDCoefficients
+import com.qualcomm.robotcore.hardware.PIDFCoefficients
+import com.qualcomm.robotcore.hardware.configuration.annotations.MotorType
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
+
+/** The first motor will be the primary motor, and will be used to find most member information. */
 //class DcMotorExThing(public var motor1: DcMotorEx, public var motor2: DcMotorEx) : DcMotorEx {
 //    var direction: DcMotorSimple.Direction = DcMotorSimple.Direction.FORWARD
 //    var power: Double = 0.0
