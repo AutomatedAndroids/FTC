@@ -27,20 +27,18 @@ public class MecanumTeleOp extends LinearOpMode {
         waitForStart();
 //        ElapsedTime updateDelta = new ElapsedTime();
         while (opModeIsActive()) {
-            double y = gamepad1.right_stick_x;
-            double x = gamepad1.left_stick_x;
-            double rx = gamepad1.left_stick_y;
+            double y = -gamepad1.left_stick_x;
+            double x = gamepad1.left_stick_y;
+            double rx = gamepad1.right_stick_x;
             double ly2 = gamepad2.left_stick_y;
             double ry2 = gamepad2.right_stick_y;
             boolean a = gamepad1.a; // extend
             boolean b = gamepad1.b; // retract
 
-
-            hardware.frontLeft.setPower(y + x + rx);
+            hardware.frontLeft.setPower(y + x - rx);
             hardware.frontRight.setPower(y - x - rx);
             hardware.backLeft.setPower(y - x + rx);
-            hardware.backRight.setPower(y + x - rx);
-
+            hardware.backRight.setPower(y + x + rx);
 
 
             if(gamepad2.dpad_left) {
