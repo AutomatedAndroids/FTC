@@ -153,7 +153,6 @@ public class MecanumTeleOp extends LinearOpMode {
                 hardware.rightSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 hardware.leftSlider.setPower(positionsSpeed);
                 hardware.rightSlider.setPower(positionsSpeed);
-
             }
             if(gamepad1.x) {
                 sliderPosition = 1040;
