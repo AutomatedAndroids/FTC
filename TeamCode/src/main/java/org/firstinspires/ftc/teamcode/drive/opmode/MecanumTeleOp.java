@@ -1,18 +1,14 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
-import android.renderscript.Sampler;
-
 import com.acmerobotics.dashboard.config.ValueProvider;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -43,6 +39,7 @@ public class MecanumTeleOp extends LinearOpMode {
         waitForStart();
 
         boolean manualArmControl = false;
+        boolean manualSliderControl = false;
 
         while (opModeIsActive()) {
             double y = -gamepad1.left_stick_x;
@@ -100,25 +97,43 @@ public class MecanumTeleOp extends LinearOpMode {
             if (gamepad2.left_bumper) {
                 if ( manualArmControl ) {
                     manualArmControl = false;
-                    telemetries.addLine("LEFT_BUMPER pressed, manual mode inactive");
+                    telemetries.addLine("LEFT_BUMPER pressed, manual arm mode inactive");
                 } else {
                     manualArmControl = true;
                     telemetries.addLine("LEFT_BUMPER pressed, manual mode active");
                     hardware.armMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     hardware.armMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     hardware.armMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    hardware.armMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    hardware.armMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 }
             }
-            if ( gamepad2.right_bumper && manualArmControl) {
-                hardware.armMotor1.setPower(0);
-                hardware.armMotor2.setPower(0);
+            if ( gamepad2.right_bumper ) {
+                if ( manualSliderControl ) {
+                    manualSliderControl = false;
+                    telemetries.addLine("RIGHT_BUMPER pressed, manual slider mode inactive");
+                } else {
+                    manualSliderControl = true;
+                    telemetries.addLine("RIGHT_BUMPER pressed, manual mode active");
+                    hardware.rightSlider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    hardware.leftSlider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    hardware.rightSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    hardware.leftSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                }
             }
             if (manualArmControl) {
                 hardware.armMotor1.setPower(gamepad2.right_stick_y);
                 hardware.armMotor2.setPower(gamepad2.right_stick_y);
                 telemetries.addData("Manual Arm Control", manualArmControl);
-                telemetries.addData("arm motors power input", hardware.armMotor1.getPower());
+                telemetries.addData("Arm Motors Power Input", hardware.armMotor1.getPower());
+            }
+            if (manualSliderControl) {
+                hardware.rightSlider.setPower(gamepad2.right_stick_y);
+                hardware.leftSlider.setPower(gamepad2.right_stick_y);
+                telemetries.addData("Manual Slider Control", manualSliderControl);
+                telemetries.addData("Slider Motors Power Input", hardware.leftSlider.getPower());
+            }
+            if ( gamepad1.left_stick_button && gamepad1.right_stick_button) {
+                RobotLog.setGlobalErrorMsg(new RuntimeException("ERROR"), "DRIVER INITIATED THROWN ERROR. CRITICAL.");
             }
             telemetries.addLine(" Arm Motor 1; \n\t Current: " + String.valueOf(hardware.armMotor1.getCurrent(CurrentUnit.AMPS)) + "\n\t Position: " + String.valueOf(hardware.armMotor1.getCurrentPosition()) + "\n\t Target: " + String.valueOf(hardware.armMotor1.getTargetPosition()));
             telemetries.addLine(" Arm Motor 2; \n\t Current: " + String.valueOf(hardware.armMotor2.getCurrent(CurrentUnit.AMPS)) + "\n\t Position: " + String.valueOf(hardware.armMotor2.getCurrentPosition()) + "\n\t Target: " + String.valueOf(hardware.armMotor2.getTargetPosition()));
