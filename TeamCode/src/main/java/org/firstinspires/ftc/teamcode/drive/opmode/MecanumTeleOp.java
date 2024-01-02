@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.ValueProvider;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
@@ -40,6 +41,7 @@ public class MecanumTeleOp extends LinearOpMode {
         }
 
         //
+        hardware.leftSlider.setDirection(DcMotorSimple.Direction.REVERSE);
         waitForStart();
 
         boolean manualArmControl = false;
@@ -154,7 +156,7 @@ public class MecanumTeleOp extends LinearOpMode {
 
             }
             if(gamepad1.x) {
-                sliderPosition = 128;
+                sliderPosition = 1040;
                 telemetries.addLine("gp1 x");
                 hardware.leftSlider.setTargetPosition(sliderPosition);
                 hardware.rightSlider.setTargetPosition(sliderPosition);
@@ -164,14 +166,27 @@ public class MecanumTeleOp extends LinearOpMode {
                 hardware.rightSlider.setPower(positionsSpeed);
             }
             if(gamepad1.y) {
-                sliderPosition = 260;
+                sliderPosition = 1650;
                 telemetries.addLine("gp1 y");
                 hardware.leftSlider.setTargetPosition(sliderPosition);
                 hardware.rightSlider.setTargetPosition(sliderPosition);
-                hardware.leftSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hardware.rightSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 hardware.leftSlider.setPower(positionsSpeed);
                 hardware.rightSlider.setPower(positionsSpeed);
+                hardware.leftSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hardware.rightSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                while (hardware.leftSlider.isBusy() || hardware.rightSlider.isBusy()) {
+//                    telemetries.addData("Current Position of left slider  ", String.valueOf(hardware.leftSlider.getCurrentPosition()));
+//                    telemetries.addData("Current Position of right slider ", String.valueOf(hardware.rightSlider.getCurrentPosition()));
+//                    telemetries.addData("Target pos. ltr", String.valueOf(hardware.leftSlider.getTargetPosition())," " , String.valueOf(hardware.rightSlider.getTargetPosition()));
+//                }
+//                  Arm.setTargetPosition(position);
+//                Arm.setPower(LIFT_POWER);
+//                Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                while (Arm.isBusy()) {
+//                    myOpMode.telemetry.addData("Current Position", Arm.getCurrentPosition());
+//                    myOpMode.telemetry.addData("Target Position", Arm.getTargetPosition());
+//                    myOpMode.telemetry.update();
+//                }
             }
 
             telemetries.update();
