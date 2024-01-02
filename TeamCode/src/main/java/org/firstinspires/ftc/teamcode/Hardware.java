@@ -59,7 +59,7 @@ public class Hardware {
         droneServo = hardwareMap.get(Servo.class, "droneLauncher");
         clawFront = hardwareMap.get(Servo.class, "clawFrontServo");
         clawBack = hardwareMap.get(Servo.class, "clawBackServo");
-        clawWrist = hardwareMap.get(Servo.class, "ClawMountServo");
+        clawWrist = hardwareMap.get(Servo.class, "clawMountServo");
 
 
         motors = new DcMotorEx[]{frontLeft, frontRight, backLeft, backRight};
