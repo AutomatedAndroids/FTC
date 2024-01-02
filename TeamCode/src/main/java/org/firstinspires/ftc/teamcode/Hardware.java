@@ -50,11 +50,13 @@ public class Hardware {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
+
         armMotor1 = hardwareMap.get(DcMotorEx.class, "leftArm");
         armMotor2 = hardwareMap.get(DcMotorEx.class, "rightArm");
 
         rightSlider = hardwareMap.get(DcMotorEx.class, "rightSlider");
         leftSlider = hardwareMap.get(DcMotorEx.class, "leftSlider");
+        rightSlider.setDirection(DcMotorSimple.Direction.REVERSE);
 
         droneServo = hardwareMap.get(Servo.class, "droneLauncher");
         clawFront = hardwareMap.get(Servo.class, "clawFrontServo");
