@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.RUN_USING_ENCODER;
 
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -39,6 +40,8 @@ public class Hardware {
     public Servo clawBack;
     public Servo clawWrist;
 
+    public HuskyLens huskyLens;
+
     public Hardware(HardwareMap hardwareMap) {
         //initialize variables
         frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
@@ -56,13 +59,14 @@ public class Hardware {
 
         rightSlider = hardwareMap.get(DcMotorEx.class, "rightSlider");
         leftSlider = hardwareMap.get(DcMotorEx.class, "leftSlider");
-        rightSlider.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftSlider.setDirection(DcMotorSimple.Direction.REVERSE);
 
         droneServo = hardwareMap.get(Servo.class, "droneLauncher");
         clawFront = hardwareMap.get(Servo.class, "clawFrontServo");
         clawBack = hardwareMap.get(Servo.class, "clawBackServo");
         clawWrist = hardwareMap.get(Servo.class, "clawMountServo");
 
+        huskyLens = hardwareMap.get(HuskyLens.class, "huskyDog");
 
         motors = new DcMotorEx[]{frontLeft, frontRight, backLeft, backRight};
 

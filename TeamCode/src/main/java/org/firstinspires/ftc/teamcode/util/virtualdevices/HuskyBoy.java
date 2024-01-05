@@ -2,13 +2,23 @@ package org.firstinspires.ftc.teamcode.util.virtualdevices;
 
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 
+import org.firstinspires.ftc.teamcode.Hardware;
+
 import java.util.ArrayList;
+
+import kotlin.text.CharDirectionality;
 
 public class HuskyBoy {
     HuskyLens husky;
+    public HuskyBoy(Hardware hardware) {
+        this.husky = hardware.huskyLens;
+    }
     HuskyBoy(HuskyLens huskyLens) {
         this.husky = huskyLens;
     }
+    // Constants
+    public static int leftPixelBound;
+    public static int rightPixelBound;
 
     enum Tag{
         BlueAlliLeft,
@@ -18,26 +28,37 @@ public class HuskyBoy {
         RedAlliCenter,
         RedAlliRight,
         AudienceLeft,
-        AudienceRight
+        AudienceRight,
+        AprilTagGeneric
     }
 
     enum Prop {
         BlueTeamOur,
-        RedteamOur,
+        RedTeamOur,
         BlueTeamTheirs,
-        RedTeamTheirs
+        RedTeamTheirs,
+        PropGeneric
+    }
+    enum PropLocation {
+        LEFT, CENTER, RIGHT
     }
 
     /** This function will return an arraylist of all tags seen by the robot.
      * It uses the Tag enumerator. */
     public ArrayList<Tag> scanTag() {
-        husky.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
+
+       husky.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
         ArrayList<Tag> tags = new ArrayList<Tag>();
-        if (husky.blocks()[0] == null) {
+        if (husky.blocks() == null) {
             return new ArrayList<Tag>();
-        }
-        for (HuskyLens.Block block : husky.blocks()) {
-            tags.add(Tag.values()[block.id]);
+        } else {
+            for (HuskyLens.Block block : husky.blocks()) {
+                if (block.id < 0) {
+                    tags.add(Tag.AprilTagGeneric);
+                } else {
+                    tags.add(Tag.values()[block.id - 1]);
+                }
+            }
         }
         return tags;
     }
@@ -48,14 +69,22 @@ public class HuskyBoy {
     public ArrayList<Prop> scanProp() {
         husky.selectAlgorithm(HuskyLens.Algorithm.OBJECT_RECOGNITION);
         ArrayList<Prop> props = new ArrayList<Prop>();
-        if (husky.blocks()[0] == null) {
+        if (husky.blocks() == null) {
             return new ArrayList<Prop>();
-        }
-        for (HuskyLens.Block block : husky.blocks()) {
-            props.add(Prop.values()[block.id]);
+        } else {
+            for (HuskyLens.Block block : husky.blocks()) {
+                props.add(Prop.values()[block.id-1]);
+            }
         }
         return props;
     }
-
-
+    public PropLocation findPropLocation(HuskyLens.Block block) {
+        if (block.x < leftPixelBound) {
+            return PropLocation.LEFT;
+        } else if (block.x < rightPixelBound && block.x >= leftPixelBound) {
+            return PropLocation.CENTER;
+        } else {
+            return PropLocation.RIGHT;
+        }
+    }
 }

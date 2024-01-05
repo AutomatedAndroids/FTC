@@ -15,11 +15,13 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.util.virtualdevices.HuskyBoy;
+
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.util.RobotLog;
 
-@TeleOp(group = "drive")
+@TeleOp(name="Mecanum TeleOp", group = "drive")
 public class MecanumTeleOp extends LinearOpMode {
     Telemetry telemetries;
     double positionsSpeed = 0.1;
@@ -137,8 +139,8 @@ public class MecanumTeleOp extends LinearOpMode {
 
             }
             if (gamepad2.x) {
-                hardware.clawBack.setPosition(0.25);
-                hardware.clawFront.setPosition(0.25);
+                hardware.clawBack.setPosition(0.15);
+                hardware.clawFront.setPosition(0.15);
             }
             if (gamepad2.y) {
                 hardware.clawFront.setPosition(0.05);
@@ -166,7 +168,7 @@ public class MecanumTeleOp extends LinearOpMode {
             }
             if(gamepad1.y) {
                 sliderPosition = 1650;
-                telemetries.addLine("gp1 y");
+                telemetries.addLine(    "gp1 y");
                 hardware.leftSlider.setTargetPosition(sliderPosition);
                 hardware.rightSlider.setTargetPosition(sliderPosition);
                 hardware.leftSlider.setPower(positionsSpeed);
@@ -187,6 +189,9 @@ public class MecanumTeleOp extends LinearOpMode {
 //                    myOpMode.telemetry.update();
 //                }
             }
+
+//            HuskyBoy huskyBoy = new HuskyBoy(hardware);
+//            telemetries.addLine(huskyBoy.scanTag().toString());
 
             telemetries.update();
 

@@ -104,10 +104,11 @@ public class SampleMecanumDrive extends MecanumDrive {
         // TODO: adjust the names of the following hardware devices to match your configuration
 //        imu = hardware.imu; Not necesary when we are using three wheel odometry
 
-        leftFront = (DcMotorEx) hardware.frontLeft;
-        leftRear = (DcMotorEx) hardware.backLeft;
-        rightRear = (DcMotorEx) hardware.backRight;
-        rightFront = (DcMotorEx) hardware.frontRight;
+        leftFront = hardware.backRight;
+        leftRear = hardware.frontRight;
+        rightRear = hardware.frontLeft;
+        rightFront = hardware.backLeft;
+
 
         motors = Arrays.asList((DcMotorEx[]) hardware.motors);
 

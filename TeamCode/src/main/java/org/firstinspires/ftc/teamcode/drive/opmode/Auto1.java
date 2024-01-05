@@ -7,16 +7,18 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-@Autonomous(name = "Near Backdrop")
+@Autonomous(name = "Near Backdrop", preselectTeleOp="Mechanum TeleOp")
 public class Auto1 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d())
-                .strafeRight(10)
+        Pose2d pose = new Pose2d(20, -60, Math.toRadians(90));
+        drive.setPoseEstimate(pose);
+        Trajectory trajectory = drive.trajectoryBuilder(pose)
+                .strafeRight(40)
                 .build();
         waitForStart();
-        drive.followTrajectory(myTrajectory);
+        drive.followTrajectory(trajectory);
 
     }
 }
