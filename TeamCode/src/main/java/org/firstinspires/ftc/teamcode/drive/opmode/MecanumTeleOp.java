@@ -57,10 +57,10 @@ public class MecanumTeleOp extends LinearOpMode {
             boolean a = gamepad1.a; // extend
             boolean b = gamepad1.b; // retract
 
-            hardware.frontLeft.setPower(y + x - rx);
-            hardware.frontRight.setPower(y - x - rx);
-            hardware.backLeft.setPower(y - x + rx);
-            hardware.backRight.setPower(y + x + rx);
+            hardware.frontLeft.setPower(0.85*(y + x - rx));
+            hardware.frontRight.setPower(0.85*(y - x - rx));
+            hardware.backLeft.setPower(0.85*(y - x + rx));
+            hardware.backRight.setPower(0.85*(y + x + rx));
 
             telemetries.addData("Heading Est: ", drive.getPoseEstimate().getHeading());
             telemetries.addData("X Est: ", drive.getPoseEstimate().getX());
@@ -95,7 +95,7 @@ public class MecanumTeleOp extends LinearOpMode {
                 telemetries.addLine("DPAD_RIGHT was pressed");
                 hardware.armMotor1.setTargetPosition(positionOfArm);
                 hardware.armMotor2.setTargetPosition(positionOfArm);
-                hardware.armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                 hardware.armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 hardware.armMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 hardware.armMotor1.setPower(positionsSpeed);
                 hardware.armMotor2.setPower(positionsSpeed);
