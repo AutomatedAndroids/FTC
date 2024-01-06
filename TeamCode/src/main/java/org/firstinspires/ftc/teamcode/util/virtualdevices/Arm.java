@@ -101,10 +101,11 @@ public class Arm {
     }
     /** Provided degrees on a scale of 0 - 360 degrees. */
     public void setArmTargetPosition(int targetAngle) {
-        currentTargetAngle = targetAngle;
-        end = new TrapezoidProfile.State(currentTargetAngle,0);
-        updateMotionProfile();
-
+        if (targetAngle >=0 && targetAngle <= 270) {
+            currentTargetAngle = targetAngle;
+            end = new TrapezoidProfile.State(currentTargetAngle,0);
+            updateMotionProfile();
+        }
     }
     /** Provided raidans for the arm.*/
     public void setArmTargetPosition(double targetRadian) {

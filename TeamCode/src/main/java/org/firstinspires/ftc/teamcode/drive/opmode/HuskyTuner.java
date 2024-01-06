@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.ValueProvider;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.util.virtualdevices.HuskyBoy;
 
 import java.util.ArrayList;
 
+@Disabled
 @TeleOp(name = "Husky Tuner")
 public class HuskyTuner extends LinearOpMode {
     @Override
@@ -49,7 +51,7 @@ public class HuskyTuner extends LinearOpMode {
         while (opModeIsActive()) {
             blocks = hardware.huskyLens.blocks();
             HuskyLens.Block block;
-            if (blocks.length != 0); {
+            if (blocks.length != 0) {
                 block = blocks[0];
                 if (block.x < HuskyBoy.leftPixelBound) {
                     telemetries.addLine("LEFT STRIP");

@@ -39,7 +39,7 @@ public class HuskyBoy {
         RedTeamTheirs,
         PropGeneric
     }
-    enum PropLocation {
+    public enum PropLocation {
         LEFT, CENTER, RIGHT
     }
 
@@ -86,5 +86,9 @@ public class HuskyBoy {
         } else {
             return PropLocation.RIGHT;
         }
+    }
+
+    public HuskyLens getHusky() {
+        return husky;
     }
 }
