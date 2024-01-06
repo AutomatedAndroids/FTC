@@ -1,28 +1,21 @@
 package org.firstinspires.ftc.teamcode.util.virtualdevices;
 
-import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.acmerobotics.roadrunner.util.NanoClock;
 import com.arcrobotics.ftclib.controller.wpilibcontroller.ArmFeedforward;
-
-import org.firstinspires.ftc.teamcode.Hardware;
-import org.firstinspires.ftc.teamcode.util.Encoder;
-
 import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.teamcode.Hardware;
+import org.firstinspires.ftc.teamcode.util.Encoder;
 
-public class Arm{
-
+public class Arm {
     /*
-    * This requries "volts" however since those variables are more difficult to read and influence, the values are extrapolated by a constant.
-    * It represents the ratio from power to voltage, however is not used in any of the following functions.
-    * */
+     * This requries "volts" however since those variables are more difficult to read and influence, the values are extrapolated by a constant.
+     * It represents the ratio from power to voltage, however is not used in any of the following functions.
+     * */
 
     // Constants;
     public double extrapConst;
@@ -56,104 +49,91 @@ public class Arm{
     /* Note: Due to the fact that we only have one arm, the target angle can be made static.
     However, if funcitonality for multiple arms is desired, changes must be made. */
 
-    public static double currentTargetAngle;
+    public double currentTargetAngle;
+    public double positionError;
+
+    private TrapezoidProfile profile;
 
     // Other
     private TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(maxVel, maxAccel);
     private ArmFeedforward armFeedforward = new ArmFeedforward(kS, kG, kV, kA);
     Hardware hardware;
-    private final Command setArmNonSequential = new SetArmPosition(new ArmSubsystem(this.hardware), this);
     private PIDCoefficients coefficients;
+    private DcMotorControllerEx controller;
+    protected double controlEffort;
+    private Encoder encoder;
 
-    public Arm(Hardware hardware) {
+    private DcMotorEx armMotor1;
+    private DcMotorEx armMotor2;
+
+    private TrapezoidProfile.State start;
+    private TrapezoidProfile.State end;
+
+
+    private NanoClock nano;
+    private double armBuild;
+    private double execAcc;
+    private double totalProfileTime;
+    public double timeRemaining;
+    public Arm(Hardware hardware, NanoClock nanoClock) {
         this.hardware = hardware;
+        this.encoder = new Encoder(hardware.armMotor1);
+        this.controlEffort = 0;
+        this.armMotor1 = hardware.armMotor1;
+        this.armMotor2 = hardware.armMotor2;
+        updateConstants();
+        this.nano = nanoClock;
     }
-
+    /** This method only updates the methods which require the constants. */
+    public void updateConstants() {
+        this.coefficients = new PIDCoefficients(kP, kI, kD);
+        this.armFeedforward = new ArmFeedforward(kS,kG,kV,kA);
+        armMotor1.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, coefficients);
+        armMotor2.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, coefficients);
+    }
+    public void updateMotionProfile() {
+        profile = new TrapezoidProfile(constraints,new TrapezoidProfile.State(), end );
+        totalProfileTime = profile.totalTime();
+    }
     public PIDCoefficients getCoefficients() {
         this.coefficients = new PIDCoefficients(kP, kI, kD);
         return this.coefficients;
     }
-
-    public ArmFeedforward getArmFeedforward() {
-
-        return armFeedforward;
-    }
-    public void setArmPosition(double targetAngle) {
+    /** Provided degrees on a scale of 0 - 360 degrees. */
+    public void setArmTargetPosition(int targetAngle) {
         currentTargetAngle = targetAngle;
-        CommandScheduler.getInstance().schedule(setArmNonSequential);
+        end = new TrapezoidProfile.State(currentTargetAngle,0);
+        updateMotionProfile();
+
+    }
+    /** Provided raidans for the arm.*/
+    public void setArmTargetPosition(double targetRadian) {
+        currentTargetAngle = Math.toDegrees(targetRadian);
     }
     public void resetArmPosition() {
         DcMotor.RunMode preexistingRunmode = hardware.armMotor1.getMode();
         hardware.armMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hardware.armMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hardware.armMotor1.setMode(preexistingRunmode);
-        hardware.armMotor2.setMode(preexistingRunmode);    }
-    public int getArmPosition() {
-        return new Encoder(hardware.armMotor1).getCurrentPosition();
+        hardware.armMotor2.setMode(preexistingRunmode);
     }
-}
-
-class ArmSubsystem extends SubsystemBase {
-    private final DcMotorEx armMotor1;
-    private final DcMotorEx armMotor2;
-    public ArmSubsystem(Hardware hardware) {
-        armMotor1 = hardware.armMotor1;
-        armMotor2 = hardware.armMotor2;
-    }
-
-    public DcMotorEx getArmMotor1() {
-        return armMotor1;
-    }
-
-    public DcMotorEx getArmMotor2() {
-        return armMotor2;
-    }
-    public void initialize() {
-
-    }
-}
-
-class SetArmPosition extends CommandBase {
-    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private final ArmSubsystem armSub;
-    private final DcMotorEx armMotor1;
-    private final DcMotorEx armMotor2;
-    private Encoder encoder;
-    private int motorPort;
-    DcMotorControllerEx controller;
-
-    private Arm arm;
-
-    protected double controlEffort;
-    protected double positionError;
-
-    SetArmPosition(ArmSubsystem armSubSystem, Arm arm) {
-        this.armSub = armSubSystem;
-        this.armMotor1 = armSub.getArmMotor1();
-        this.armMotor2 = armSub.getArmMotor2();
-        this.arm = arm;
-        addRequirements(armSubSystem);
-        this.motorPort = armMotor1.getPortNumber();
-    }
-    @SuppressWarnings({})
-    @Override
-    public void initialize() {
-        armSub.initialize();
-        encoder = new Encoder(armMotor1);
-        armMotor1.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, arm.getCoefficients());
-        controlEffort = 0;
-    }
-
-    @Override
     public void execute() {
-        controlEffort+=arm.getArmFeedforward().calculate((Math.toRadians(encoder.getCurrentPosition())/560*360), encoder.getCorrectedVelocity());
-        positionError = Arm.currentTargetAngle - (double) encoder.getCurrentPosition() /560*360;
-        controller.setPIDCoefficients(motorPort,DcMotor.RunMode.RUN_USING_ENCODER, arm.getCoefficients());
-        controller.setMotorPower(motorPort, controlEffort);
+        execAcc=nano.seconds()-execAcc;
+        controlEffort+=armFeedforward.calculate(Math.toRadians(profile.calculate(execAcc).position),profile.calculate(execAcc).velocity);
+        positionError = this.currentTargetAngle - (double) encoder.getCurrentPosition() / 560*360;
+        armMotor1.setPower(controlEffort);
+        armMotor2.setPower(controlEffort);
     }
-
-    @Override
-    public boolean isFinished() {
-        return positionError<arm.degreeTolerance;
+    public void tuningExecute() {
+        execAcc=nano.seconds()-execAcc;
+        controlEffort+=armFeedforward.calculate(Math.toRadians(profile.calculate(execAcc).position), profile.calculate(execAcc).velocity);
+        positionError = this.currentTargetAngle - (double) encoder.getCurrentPosition() / 560*360;
+        updateConstants();
+        armMotor1.setPower(controlEffort);
+        armMotor2.setPower(controlEffort);
+    }
+    public int getArmPosition() {
+        return this.encoder.getCurrentPosition();
     }
 }
+

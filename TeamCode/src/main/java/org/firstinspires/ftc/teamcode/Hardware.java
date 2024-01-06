@@ -53,7 +53,6 @@ public class Hardware {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-
         armMotor1 = hardwareMap.get(DcMotorEx.class, "leftArm");
         armMotor2 = hardwareMap.get(DcMotorEx.class, "rightArm");
 

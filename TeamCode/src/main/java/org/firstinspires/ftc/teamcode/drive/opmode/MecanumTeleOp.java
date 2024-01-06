@@ -42,7 +42,6 @@ public class MecanumTeleOp extends LinearOpMode {
                     + "(hardwareMap));\" is called in SampleMecanumDrive.java");
         }
 
-        //
         hardware.leftSlider.setDirection(DcMotorSimple.Direction.REVERSE);
         waitForStart();
 
@@ -111,7 +110,7 @@ public class MecanumTeleOp extends LinearOpMode {
                     hardware.armMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     hardware.armMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     hardware.armMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    hardware.armMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    hardware.armMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 }
             }
             if ( gamepad2.right_bumper && manualArmControl) {
@@ -175,24 +174,12 @@ public class MecanumTeleOp extends LinearOpMode {
                 hardware.rightSlider.setPower(positionsSpeed);
                 hardware.leftSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 hardware.rightSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                while (hardware.leftSlider.isBusy() || hardware.rightSlider.isBusy()) {
-//                    telemetries.addData("Current Position of left slider  ", String.valueOf(hardware.leftSlider.getCurrentPosition()));
-//                    telemetries.addData("Current Position of right slider ", String.valueOf(hardware.rightSlider.getCurrentPosition()));
-//                    telemetries.addData("Target pos. ltr", String.valueOf(hardware.leftSlider.getTargetPosition())," " , String.valueOf(hardware.rightSlider.getTargetPosition()));
-//                }
-//                  Arm.setTargetPosition(position);
-//                Arm.setPower(LIFT_POWER);
-//                Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                while (Arm.isBusy()) {
-//                    myOpMode.telemetry.addData("Current Position", Arm.getCurrentPosition());
-//                    myOpMode.telemetry.addData("Target Position", Arm.getTargetPosition());
-//                    myOpMode.telemetry.update();
-//                }
             }
 
 //            HuskyBoy huskyBoy = new HuskyBoy(hardware);
 //            telemetries.addLine(huskyBoy.scanTag().toString());
 
+            drive.getLocalizer().update();
             telemetries.update();
 
 //            if (gamepad1.a) {
