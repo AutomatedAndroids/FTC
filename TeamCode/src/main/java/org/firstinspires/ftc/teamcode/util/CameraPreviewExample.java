@@ -6,7 +6,6 @@
 //import static org.bytedeco.opencv.global.opencv_highgui.imshow;
 //import static org.bytedeco.opencv.global.opencv_highgui.waitKey;
 //
-//
 //import org.bytedeco.depthai.ColorCamera;
 //import org.bytedeco.depthai.ColorCameraProperties;
 //import org.bytedeco.depthai.DataOutputQueue;

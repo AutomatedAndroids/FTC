@@ -17,6 +17,7 @@ public class FarBackdropRed extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new MecanumDrive(hardwareMap);
-        NearBackdropBlue.scanPropPosition(new HuskyBoy(new Hardware(hardwareMap)), NanoClock.system(), this::isStopRequested, this.drive);
+//        NearBackdropBlue.scanPropPosition(new HuskyBoy(new Hardware(hardwareMap)), NanoClock.system(), this::isStopRequested, this.drive);
+        waitForStart();
     }
 }

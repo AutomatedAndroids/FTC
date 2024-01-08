@@ -18,9 +18,10 @@ public class NearBackdropBlue extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new MecanumDrive(this.hardwareMap);
-        scanPropPosition(new HuskyBoy(new Hardware(hardwareMap)), NanoClock.system(), this::isStopRequested, this.drive);
-        drive.backward(1,0.2);
-        drive.strafeRight(1.5,0.7);
+//        scanPropPosition(new HuskyBoy(new Hardware(hardwareMap)), NanoClock.system(), this::isStopRequested, this.drive);
+//        drive.backward(1,0.2);
+        waitForStart();
+        drive.strafeLeft(1.5,0.7);
     }
     public static void scanPropPosition(HuskyBoy husky, NanoClock nano, Callable<Boolean> stopFunction, MecanumDrive driveProvided) {
         HuskyLens.Block[] blocks;
