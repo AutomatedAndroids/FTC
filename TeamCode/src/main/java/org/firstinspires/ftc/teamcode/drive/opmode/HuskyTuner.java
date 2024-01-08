@@ -51,7 +51,7 @@ public class HuskyTuner extends LinearOpMode {
         while (opModeIsActive()) {
             blocks = hardware.huskyLens.blocks();
             HuskyLens.Block block;
-            if (blocks.length != 0) {
+            try {
                 block = blocks[0];
                 if (block.x < HuskyBoy.leftPixelBound) {
                     telemetries.addLine("LEFT STRIP");
@@ -60,7 +60,7 @@ public class HuskyTuner extends LinearOpMode {
                 } else {
                     telemetries.addLine("RIGHT STRIP");
                 }
-            }
+            } catch (ArrayIndexOutOfBoundsException ignore) {}
         }
     }
 }

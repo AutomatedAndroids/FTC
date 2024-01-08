@@ -1,114 +1,88 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.drive.opmode
 
-import android.renderscript.Sampler;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorSimple
+import org.firstinspires.ftc.robotcore.external.Telemetry
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
+import org.firstinspires.ftc.teamcode.Hardware
 
-import com.acmerobotics.dashboard.config.ValueProvider;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
+@TeleOp(name = "Mecanum TeleOp", group = "drive")
+class MecanumTeleOp : LinearOpMode() {
+    lateinit var telemetries: Telemetry
+    var positionsSpeed = 0.2
+    override fun runOpMode() {
+        waitForStart()
+        val positionOfArm = 0
+        var sliderPosition = 0
+        val started = true
+        //        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        val hardware = Hardware(hardwareMap)
+        this.telemetries = telemetry // new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+        //        FtcDashboard.getInstance().addConfigVariable("Drive", "Arm To Position Speed",         new ValueProvider<Double>() {public Double get() {return positionsSpeed; } public void set(Double value) {positionsSpeed = value; }});
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.Hardware;
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.util.DashboardUtil;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.util.virtualdevices.HuskyBoy;
-
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.qualcomm.robotcore.util.RobotLog;
-
-@TeleOp(name="Mecanum TeleOp", group = "drive")
-public class MecanumTeleOp extends LinearOpMode {
-    Telemetry telemetries;
-    double positionsSpeed = 0.2;
-    @Override
-    public void runOpMode() {
-        waitForStart();
-        int positionOfArm = 0;
-        int sliderPosition = 0;
-        boolean started = true;
-//        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-          Hardware hardware = new Hardware(hardwareMap);
-          telemetries = this.telemetry; // new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
-//        FtcDashboard.getInstance().addConfigVariable("Drive", "Arm To Position Speed",         new ValueProvider<Double>() {public Double get() {return positionsSpeed; } public void set(Double value) {positionsSpeed = value; }});
-        
 //        if (!(drive.getLocalizer() instanceof StandardTrackingWheelLocalizer)) {
 //            RobotLog.setGlobalErrorMsg("StandardTrackingWheelLocalizer is not being set in the "
 //                    + "drive class. Ensure that \"setLocalizer(new StandardTrackingWheelLocalizer"
 //                    + "(hardwareMap));\" is called in SampleMecanumDrive.java");
 //        }
-
-
-        hardware.leftSlider.setDirection(DcMotorSimple.Direction.REVERSE);
-        waitForStart();
-
-        boolean manualArmControl = false;
-
+        hardware.leftSlider.direction = DcMotorSimple.Direction.REVERSE
+        waitForStart()
+        val manualArmControl = false
         while (opModeIsActive()) {
-            double y = -gamepad1.left_stick_x;
-            double x = gamepad1.left_stick_y;
-            double rx = gamepad1.right_stick_x;
-
-            hardware.frontLeft.setPower(0.85 * (y + x - rx));
-            hardware.frontRight.setPower(0.85 * (y - x - rx));
-            hardware.backLeft.setPower(0.85 * (y - x + rx));
-            hardware.backRight.setPower(0.85 * (y + x + rx));
-
-            hardware.frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            hardware.frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            hardware.backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            hardware.backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-            telemetries.addLine(" \n Current Voltage: " + String.valueOf(hardware.batteryVoltageSens.getVoltage()));
-            telemetries.addLine(" \n");
-            telemetries.addLine(" Slider Motor Left; \n\t Current: " + String.valueOf(hardware.leftSlider.getCurrent(CurrentUnit.AMPS)) + "\n\t Position: " + String.valueOf(hardware.leftSlider.getCurrentPosition()) + "\n\t Target: " + String.valueOf(hardware.leftSlider.getTargetPosition()));
-            telemetries.addLine(" Slider Motor Right; \n\t Current: " + String.valueOf(hardware.rightSlider.getCurrent(CurrentUnit.AMPS)) + "\n\t Position: " + String.valueOf(hardware.rightSlider.getCurrentPosition()) + "\n\t Target: " + String.valueOf(hardware.rightSlider.getTargetPosition()));
-
-
-            if(gamepad2.dpad_down) {
-                sliderPosition = 0;
-                telemetries.addLine("gp1 a");
-                hardware.leftSlider.setTargetPosition(sliderPosition);
-                hardware.rightSlider.setTargetPosition(sliderPosition);
-                hardware.leftSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hardware.rightSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hardware.leftSlider.setPower(positionsSpeed);
-                hardware.rightSlider.setPower(positionsSpeed);
+            val y = -gamepad1.left_stick_x.toDouble()
+            val x = gamepad1.left_stick_y.toDouble()
+            val rx = gamepad1.right_stick_x.toDouble()
+            hardware.frontLeft.power = 0.85 * (y + x - rx)
+            hardware.frontRight.power = 0.85 * (y - x - rx)
+            hardware.backLeft.power = 0.85 * (y - x + rx)
+            hardware.backRight.power = 0.85 * (y + x + rx)
+            hardware.frontRight.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+            hardware.frontLeft.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+            hardware.backLeft.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+            hardware.backRight.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+            telemetry.addLine(" \n Current Voltage: " + hardware.batteryVoltageSens.voltage.toString())
+            telemetries.addLine(" \n")
+            telemetries.addLine(" Slider Motor Left; \n\t Current: " + hardware.leftSlider.getCurrent(CurrentUnit.AMPS).toString() + "\n\t Position: " + hardware.leftSlider.currentPosition.toString() + "\n\t Target: " + hardware.leftSlider.targetPosition.toString())
+            telemetries.addLine(" Slider Motor Right; \n\t Current: " + hardware.rightSlider.getCurrent(CurrentUnit.AMPS).toString() + "\n\t Position: " + hardware.rightSlider.currentPosition.toString() + "\n\t Target: " + hardware.rightSlider.targetPosition.toString())
+            if (gamepad2.dpad_down) {
+                sliderPosition = 0
+                telemetries.addLine("gp1 a")
+                hardware.leftSlider.targetPosition = sliderPosition
+                hardware.rightSlider.targetPosition = sliderPosition
+                hardware.leftSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
+                hardware.rightSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
+                hardware.leftSlider.power = positionsSpeed
+                hardware.rightSlider.power = positionsSpeed
             }
-            if(gamepad2.dpad_left || gamepad2.dpad_right) {
-                sliderPosition = 1040;
-                telemetries.addLine("gp1 x");
-                hardware.leftSlider.setTargetPosition(sliderPosition);
-                hardware.rightSlider.setTargetPosition(sliderPosition);
-                hardware.leftSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hardware.rightSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hardware.leftSlider.setPower(positionsSpeed);
-                hardware.rightSlider.setPower(positionsSpeed);
+            if (gamepad2.dpad_left || gamepad2.dpad_right) {
+                sliderPosition = 1040
+                telemetries.addLine("gp1 x")
+                hardware.leftSlider.targetPosition = sliderPosition
+                hardware.rightSlider.targetPosition = sliderPosition
+                hardware.leftSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
+                hardware.rightSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
+                hardware.leftSlider.power = positionsSpeed
+                hardware.rightSlider.power = positionsSpeed
             }
-            if(gamepad2.dpad_up) {
-                sliderPosition = 1650;
-                telemetries.addLine(    "gp1 y");
-                hardware.leftSlider.setTargetPosition(sliderPosition);
-                hardware.rightSlider.setTargetPosition(sliderPosition);
-                hardware.leftSlider.setPower(positionsSpeed);
-                hardware.rightSlider.setPower(positionsSpeed);
-                hardware.leftSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hardware.rightSlider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if (gamepad2.dpad_up) {
+                sliderPosition = 1650
+                telemetries.addLine("gp1 y")
+                hardware.leftSlider.targetPosition = sliderPosition
+                hardware.rightSlider.targetPosition = sliderPosition
+                hardware.leftSlider.power = positionsSpeed
+                hardware.rightSlider.power = positionsSpeed
+                hardware.leftSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
+                hardware.rightSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
             }
-
-            if ( gamepad2.a ) {
-                hardware.droneServo.setPosition(0.75);
+            if (gamepad2.a) {
+                hardware.droneServo.position = 0.75
             }
             if (gamepad2.b) {
-                hardware.droneServo.setPosition(0.15);
+                hardware.droneServo.position = 0.15
             }
-
-
-            telemetries.update();
+            telemetries.update()
             // Claw Detached
 //            if (gamepad2.a) {
 //                hardware.clawWrist.setPosition(0.45);
@@ -192,7 +166,6 @@ public class MecanumTeleOp extends LinearOpMode {
 //            }
 //            telemetries.addLine(" Arm Motor 1; \n\t Current: " + String.valueOf(hardware.armMotor1.getCurrent(CurrentUnit.AMPS)) + "\n\t Position: " + String.valueOf(hardware.armMotor1.getCurrentPosition()) + "\n\t Target: " + String.valueOf(hardware.armMotor1.getTargetPosition()));
 //            telemetries.addLine(" Arm Motor 2; \n\t Current: " + String.valueOf(hardware.armMotor2.getCurrent(CurrentUnit.AMPS)) + "\n\t Position: " + String.valueOf(hardware.armMotor2.getCurrentPosition()) + "\n\t Target: " + String.valueOf(hardware.armMotor2.getTargetPosition()));
-
         }
     }
 }
