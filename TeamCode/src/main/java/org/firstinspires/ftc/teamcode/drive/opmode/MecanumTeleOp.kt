@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
 import org.firstinspires.ftc.teamcode.Hardware
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Hardware
 @TeleOp(name = "Mecanum TeleOp", group = "drive")
 class MecanumTeleOp : LinearOpMode() {
     lateinit var telemetries: Telemetry
-    var positionsSpeed = 0.1
+    var positionsSpeed = 0.4
     override fun runOpMode() {
         waitForStart()
         var positionOfArm = 0
@@ -31,12 +32,16 @@ class MecanumTeleOp : LinearOpMode() {
 //        }
         hardware.leftSlider.direction = DcMotorSimple.Direction.REVERSE
 
-        hardware.clawFront.direction = Servo.Direction.FORWARD
+//        hardware.clawFront.direction = Servo.Direction.FORWARD
 
-        hardware.armMotor1.targetPosition = positionOfArm;
+//        hardware.armMotor1.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
 
-        hardware.armMotor1.mode = DcMotor.RunMode.RUN_TO_POSITION
-        hardware.armMotor1.power = positionsSpeed;
+//        hardware.armMotor1.targetPosition = positionOfArm;
+
+//        hardware.armMotor1.mode = DcMotor.RunMode.RUN_TO_POSITION
+//        hardware.armMotor1.power = positionsSpeed;
+
+        val droneLauncherStartPosition = hardware.droneServo.position
 
         waitForStart()
         var manualArmControl = false
@@ -76,7 +81,7 @@ class MecanumTeleOp : LinearOpMode() {
                 hardware.leftSlider.power = positionsSpeed
                 hardware.rightSlider.power = positionsSpeed
             }
-            if (gamepad1.dpad_up) {
+            if (gamepad2.dpad_up) {
                 sliderPosition = 1650
                 telemetries.addLine("gp1 y")
                 hardware.leftSlider.targetPosition = sliderPosition
@@ -86,11 +91,13 @@ class MecanumTeleOp : LinearOpMode() {
                 hardware.leftSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
                 hardware.rightSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
             }
-            if (gamepad1.a) {
-                hardware.droneServo.position = 0.78
+
+            // Drone Servo
+            if (gamepad1.a || gamepad2.left_bumper) {
+                hardware.droneServo.position = droneLauncherStartPosition + 0.3
             }
-            if (gamepad1.b) {
-                hardware.droneServo.position = 0.55
+            if (gamepad1.b || gamepad2.right_bumper) {
+                hardware.droneServo.position = droneLauncherStartPosition
             }
 
             // Claw
@@ -99,7 +106,6 @@ class MecanumTeleOp : LinearOpMode() {
             }
             if (gamepad2.b) {
                 hardware.clawWrist.setPosition(0.90);
-
             }
             if (gamepad2.x) {
                 hardware.clawBack.position = 0.15;
@@ -131,20 +137,16 @@ class MecanumTeleOp : LinearOpMode() {
                 telemetries.addLine("DPAD_DOWN");
                 hardware.armMotor1.targetPosition = positionOfArm
             }
-            if (gamepad2.left_bumper) {
-                if (manualArmControl) {
-                    manualArmControl = false
-                    telemetries.addLine("LEFT_BUMPER pressed, manual mode inactive")
-                } else {
-                    manualArmControl = true
-                    hardware.armMotor2.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
-                    hardware.armMotor1.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
-                }
-            }
-            clawWristPosition+=(gamepad2.right_stick_y/10).toDouble()
-            positionOfArm+=(gamepad2.left_stick_y*5).toInt()
-            hardware.armMotor1.targetPosition = positionOfArm
-            hardware.clawWrist.position = clawWristPosition
+//            clawWristPosition+= gamepad2.right_stick_y/100.0
+//            clawWristPosition = Range.clip(clawWristPosition, 0.0, 1.0)
+//            telemetries.addLine("Claw Wrist" + clawWristPosition)
+//            telemetries.addLine("Claw Wrist Position" + hardware.clawWrist.position)
+//            telemetries.addLine("\nArm Position" + positionOfArm)
+//            telemetries.addLine("Arm Position Real: " + hardware.armMotor1.currentPosition)
+//            positionOfArm+=(gamepad2.left_stick_y*5).toInt()
+//            hardware.armMotor1.targetPosition = positionOfArm
+//            hardware.clawWrist.position = clawWristPosition
+            telemetries.addLine("\n\n Drone Servo \t Target: " + hardware.droneServo.position)
             telemetries.update()
         }
     }

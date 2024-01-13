@@ -53,8 +53,8 @@ public class Hardware {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        armMotor1 = hardwareMap.get(DcMotorEx.class, "leftArm");
-        armMotor2 = hardwareMap.get(DcMotorEx.class, "rightArm");
+//        armMotor1 = hardwareMap.get(DcMotorEx.class, "leftArm");
+//        armMotor2 = hardwareMap.get(DcMotorEx.class, "rightArm");
 
         rightSlider = hardwareMap.get(DcMotorEx.class, "rightSlider");
         leftSlider = hardwareMap.get(DcMotorEx.class, "leftSlider");
@@ -62,9 +62,9 @@ public class Hardware {
 
         droneServo = hardwareMap.get(Servo.class, "droneLauncher");
 
-        clawFront = hardwareMap.get(Servo.class, "clawFrontServo");
-        clawBack = hardwareMap.get(Servo.class, "clawBackServo");
-        clawWrist = hardwareMap.get(Servo.class, "clawMountServo");
+//        clawFront = hardwareMap.get(Servo.class, "clawFrontServo");
+//        clawBack = hardwareMap.get(Servo.class, "clawBackServo");
+//        clawWrist = hardwareMap.get(Servo.class, "clawMountServo");
 
         huskyLens = hardwareMap.get(HuskyLens.class, "huskyDog");
 
