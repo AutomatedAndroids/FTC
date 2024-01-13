@@ -18,6 +18,7 @@ class MecanumTeleOp : LinearOpMode() {
         waitForStart()
         var positionOfArm = 0
         var sliderPosition = 0
+        var clawWristPosition = 0.0
 
         val hardware = Hardware(hardwareMap)
         this.telemetries = telemetry // new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -140,10 +141,10 @@ class MecanumTeleOp : LinearOpMode() {
                     hardware.armMotor1.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
                 }
             }
-            if (manualArmControl) {
-                positionOfArm+=(gamepad2.left_stick_y*5).toInt()
-            }
+            clawWristPosition+=(gamepad2.right_stick_y/10).toDouble()
+            positionOfArm+=(gamepad2.left_stick_y*5).toInt()
             hardware.armMotor1.targetPosition = positionOfArm
+            hardware.clawWrist.position = clawWristPosition
             telemetries.update()
         }
     }
