@@ -9,7 +9,8 @@ import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.util.virtualdevices.HuskyBoy;
 
 @Autonomous(group = "Auto Production", name = "Far Backdrop Blue")
-public class FarBackdropBlue extends LinearOpMode {
+public class
+FarBackdropBlue extends LinearOpMode {
     MecanumDrive drive;
     @Override
     public void runOpMode() throws InterruptedException {

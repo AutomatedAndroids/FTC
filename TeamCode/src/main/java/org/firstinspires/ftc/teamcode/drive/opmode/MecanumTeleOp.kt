@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Hardware
 @TeleOp(name = "Mecanum TeleOp", group = "drive")
 class MecanumTeleOp : LinearOpMode() {
     lateinit var telemetries: Telemetry
-    var positionsSpeed = 0.2
+    var positionsSpeed = 0.1
     override fun runOpMode() {
         waitForStart()
         var positionOfArm = 0
@@ -85,19 +85,19 @@ class MecanumTeleOp : LinearOpMode() {
                 hardware.leftSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
                 hardware.rightSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
             }
-            if (gamepad2.a) {
-                hardware.droneServo.position = 0.75
+            if (gamepad1.a) {
+                hardware.droneServo.position = 0.78
             }
-            if (gamepad2.b) {
-                hardware.droneServo.position = 0.15
+            if (gamepad1.b) {
+                hardware.droneServo.position = 0.55
             }
 
             // Claw
             if (gamepad2.a) {
-                hardware.clawWrist.setPosition(0.45);
+                hardware.clawWrist.setPosition(0.55);
             }
             if (gamepad2.b) {
-                hardware.clawWrist.setPosition(0.0);
+                hardware.clawWrist.setPosition(0.90);
 
             }
             if (gamepad2.x) {
@@ -111,12 +111,12 @@ class MecanumTeleOp : LinearOpMode() {
 
             // Arm
             if(gamepad2.dpad_left) {
-                positionOfArm = 0;
+                positionOfArm = 1000;
                 telemetries.addLine("DPAD_LEFT was pressed");
                 hardware.armMotor1.setTargetPosition(positionOfArm);
             }
             if(gamepad2.dpad_up) {
-                positionOfArm = 128;
+                positionOfArm = 100;
                 telemetries.addLine("DPAD_UP was pressed");
                 hardware.armMotor1.setTargetPosition(positionOfArm);
             }
@@ -126,7 +126,7 @@ class MecanumTeleOp : LinearOpMode() {
                 hardware.armMotor1.setTargetPosition(positionOfArm);
               }
             if (gamepad2.dpad_down) {
-                positionOfArm = 350;
+                positionOfArm = 1150;
                 telemetries.addLine("DPAD_DOWN");
                 hardware.armMotor1.targetPosition = positionOfArm
             }
