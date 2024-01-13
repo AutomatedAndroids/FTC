@@ -21,11 +21,11 @@ public class EncoderTest extends LinearOpMode {
 
         // resets encoder positions for use
         hardware.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hardware.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardware.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hardware.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        Encoder leftEncoder = new Encoder(hardware.backRight);
-        Encoder rightEncoder = new Encoder(hardware.frontLeft);
+        Encoder rightEncoder = new Encoder(hardware.backRight);
+        Encoder leftEncoder = new Encoder(hardware.frontLeft);
         Encoder frontEncoder = new Encoder(hardware.frontRight);
 
         Telemetry telemetries = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());

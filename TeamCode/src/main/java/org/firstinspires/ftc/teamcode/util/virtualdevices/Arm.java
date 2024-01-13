@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.util.virtualdevices;
 
 import com.acmerobotics.roadrunner.util.NanoClock;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.controller.wpilibcontroller.ArmFeedforward;
 import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -118,6 +119,12 @@ public class Arm {
         hardware.armMotor1.setMode(preexistingRunmode);
         hardware.armMotor2.setMode(preexistingRunmode);
     }
+    /** Sets the arm position using encoder ticks. using basic API.
+     * @Params Position, in encoder ticks
+     * */
+    public void setArmPositionBasic(int Position) {
+        armMotor1.setTargetPosition(Position);
+    }
     public void execute() {
         execAcc=nano.seconds()-execAcc;
         controlEffort+=armFeedforward.calculate(Math.toRadians(profile.calculate(execAcc).position),profile.calculate(execAcc).velocity);
@@ -136,5 +143,24 @@ public class Arm {
     public int getArmPosition() {
         return this.encoder.getCurrentPosition();
     }
+}
+class PIDController extends PIDFController {
+    protected double kP;
+    protected double kI;
+    protected double kD;
+
+    private double controlEffort;
+    private double error;
+    public PIDController(double kp, double ki, double kd, double kf) {
+        super(kp, ki, kd, kf);
+    }
+
+    void update() {
+       controlEffort+=kP*error;
+    }
+    double evalDerivative() {
+        return 0.0;
+    }
+
 }
 
